@@ -1,13 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./App";
-import * as serviceWorker from "./serviceWorker";
 import Login from "./components/login";
+import * as serviceWorker from "./serviceWorker";
+import "bootstrap/dist/css/bootstrap.css";
+import Register from "./components/register";
+import Index from "./components";
+import NavBar from "./components/navBar";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Login />
+    <NavBar />
   </React.StrictMode>,
   document.getElementById("root")
 );
