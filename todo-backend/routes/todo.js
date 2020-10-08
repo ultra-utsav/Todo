@@ -28,6 +28,7 @@ router.post("/addTodo", (req, res) => {
     else {
       let { todo } = req.body;
       const email = parseJwt(token).email;
+      console.log(todo);
       if (!email || !todo) res.status(400).send("unable to store todo!");
       else {
         Todo.findOneAndUpdate(
