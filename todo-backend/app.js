@@ -16,5 +16,6 @@ app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
 //Routes
 app.use("/", require("./routes/index"));
+app.use("/todo", require("./routes/todo"));
 
 app.listen(port, () => console.log(`Listening on port : ${port}`));

@@ -1,11 +1,12 @@
-import userEvent from "@testing-library/user-event";
-import React, { useState } from "react";
+import Cookies from "universal-cookie";
+import React, { useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
-
+const cookie = new Cookies();
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [Authenticated, setAuthenticated] = useState(false);
+  const [token, setToken] = useState("--");
 
   const handleSubmit = () => {
     const requestOptions = {
@@ -24,12 +25,18 @@ const Login = () => {
     });
   };
 
+  useEffect(() => {
+    setToken(cookie.get("token"));
+  });
+
   if (Authenticated) {
     return <Redirect to="#" />;
   }
 
   return (
     <div className="App">
+      <p>wsdfasdf</p>
+      <strong>{token}</strong>
       <center>
         <form type="post" onSubmit={handleSubmit}>
           <h2>

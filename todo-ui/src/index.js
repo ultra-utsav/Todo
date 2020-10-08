@@ -4,13 +4,15 @@ import "./index.css";
 import Login from "./components/login";
 import * as serviceWorker from "./serviceWorker";
 import "bootstrap/dist/css/bootstrap.css";
-import Register from "./components/register";
-import Index from "./components";
 import NavBar from "./components/navBar";
+import MyEditor from "./components/editor/editor";
+import Register from "./components/register";
+import Profile from "./components/profile";
 
 ReactDOM.render(
   <React.StrictMode>
     <NavBar />
+    <Profile />
   </React.StrictMode>,
   document.getElementById("root")
 );

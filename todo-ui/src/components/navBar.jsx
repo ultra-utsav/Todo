@@ -23,7 +23,7 @@ const NavBar = () => {
           <li class="nav-item">
             <a class="nav-link" href="#">
               <button className="btn btn-outline-success my-2 my-sm-0 btn-sm">
-                Logout
+                New Todo
               </button>
             </a>
           </li>
