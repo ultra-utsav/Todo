@@ -16,8 +16,9 @@ router.post("/login", (req, res) => {
           res.status(400).send("invalid password!");
         } else {
           const payload = { email };
-          const token = jwt.sign(payload, cfg.secret, { expiresIn: "10m" });
-          res.cookie("token", token, { httpOnly: true });
+          const token = jwt.sign(payload, cfg.secret, { expiresIn: "1d" });
+          res.cookie("token", token);
+          console.log("login Successful!");
           res.status(200).send("login Successful!");
         }
       });
