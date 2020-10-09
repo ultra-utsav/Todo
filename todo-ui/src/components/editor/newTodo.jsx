@@ -16,11 +16,11 @@ function NewTodo(props) {
 
     fetch("http://localhost:8085/todo/addTodo ", requestOptions).then((res) => {
       if (res.status === 200) {
-        console.log(JSON.stringify(res));
+        props.addTodo(todos);
         return res.json();
       }
     });
-    props.handleClose();
+    if (props.handleClose) props.handleClose();
   };
 
   return (

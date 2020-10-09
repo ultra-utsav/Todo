@@ -85,6 +85,9 @@ const Register = () => {
               type="submit"
             />
           </div>
+          <div>
+            <a  href="/login">Already have an Account?</a>
+          </div>
         </form>
       </center>
     </div>

@@ -57,4 +57,17 @@ router.post("/register", (req, res) => {
   }
 });
 
+router.get("/authenticate", (req, res) => {
+  const token = req.cookies.token;
+  jwt.verify(token, cfg.secret, (err, token_data) => {
+    if (err) res.status(401).send("Authentication Failed!");
+    else {
+      const email = parseJwt(token).email;
+      if (!email) res.status(400).send("Authentication Failed!");
+      else {
+        res.status(200).send(email);
+      }
+    }
+  });
+});
 module.exports = router;
