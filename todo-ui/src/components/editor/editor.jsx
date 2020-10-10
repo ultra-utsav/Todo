@@ -12,8 +12,16 @@ function MyEditor(props) {
               class="form-control z-depth-1"
               style={{ marginInlineEnd: "1%" }}
               placeholder="Title of Todo... "
-              value={props.title}
+              value={props.todo.title}
             />
+            {props.todo.inProgress &&
+            <button
+              type="button"
+              style={{pointerEvents: "none"}}
+              class="btn btn-info btn-bg "
+            > 
+            InProgress
+            </button>}
           </div>
           <div class="modal-body">
             <div class="form-group shadow-textarea">
@@ -21,18 +29,20 @@ function MyEditor(props) {
                 class="form-control z-depth-1"
                 id="exampleFormControlTextarea6"
                 rows="6"
-                value={props.todo}
+                value={props.todo.content}
               ></textarea>
             </div>
           </div>
           <div className="modal-footer">
-            <button
-              type="button"
-              onClick={props.handleMarkInProgress}
-              class="btn btn-primary btn-sm "
-            >
+            {!props.todo.inProgress &&
+              <button
+                type="button"
+                onClick={props.handleMarkInProgress}
+                class="btn btn-primary btn-sm "
+              >
               In Progress
-            </button>
+              </button>
+            }            
             <button
               type="button"
               onClick={props.handleMarkComplete}

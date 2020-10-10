@@ -1,32 +1,12 @@
-import React, { Component } from "react";
+import React, { useEffect,useState } from "react";
+import { Redirect } from "react-router-dom";
 import Editor from "./editor/editor";
-
-class Profile extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      todos: [{}],
-      pendingTodos: 0,
-      inProgress: 0,
-    };
-  }
-
-  //syncState to update state
-  syncState = (todos) => {
-    let cnt = 0;
-    todos.map((todo, index) => {
-      if (todo.inProgress) cnt++;
-    });
-    this.setState({
-      todos: todos,
-      pendingTodos: todos.length - cnt,
-      inProgress: cnt,
-    });
-  };
-
-  //componentDidMount to set states before render
-  componentDidMount() {
-    const requestOptions = {
+import NewTodo from "./editor/newTodo";
+import "./profile.css";
+function Profile(props) {
+  //useEffect to set states before render
+  useEffect(() => {
+    let requestOptions = {
       method: "post",
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
@@ -40,24 +20,35 @@ class Profile extends Component {
         }
       })
       .then((data) => {
-        this.syncState(data.todos);
+        if(data){
+          props.syncState(data.todos);
+        }
       });
-  }
+
+    if(!props.authorized) {
+      requestOptions.method = "get";
+      fetch("http://localhost:8085/authenticate",requestOptions)
+        .then((res)=>{
+          if(res.status === 200)
+            props.setAuthorized(true);
+        });
+    }
+  }, props);
 
   //handleMarkComplete to handle mark complete todo
-  handleMarkComplete = (index) => {
+  const handleMarkComplete = (index) => {
     const requestOptions = {
       method: "post",
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
       credentials: "include",
-      body: JSON.stringify(this.state.todos[index]),
+      body: JSON.stringify({ todo: props.todos[index] }),
     };
 
     fetch("http://localhost:8085/todo/deleteTodo ", requestOptions).then(
       (res) => {
         if (res.status === 200) {
-          this.syncState(this.state.todos.filter((todo, ind) => ind != index));
+          props.syncState(props.todos.filter((todo, ind) => ind != index));
           return res.json();
         }
       }
@@ -65,48 +56,75 @@ class Profile extends Component {
   };
 
   //handleMarkInProgress to handle mark In progress todo
-  handleMarkInProgress = (index) => {
+  const handleMarkInProgress = (index) => {
     const requestOptions = {
       method: "post",
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
       credentials: "include",
-      body: JSON.stringify(this.state.todos[index]),
+      body: JSON.stringify({ todo: props.todos[index] }),
     };
 
     fetch("http://localhost:8085/todo/editTodo ", requestOptions).then(
       (res) => {
         if (res.status === 200) {
-          let todos = this.state.todos;
+          let todos = props.todos;
           todos[index].inProgress = true;
-          this.syncState(todos);
+          props.syncState(todos);
           return res.json();
         }
       }
     );
   };
 
-  //render
-  render() {
-    return (
-      <div>
-        inProgress : {this.state.inProgress}
-        <br />
-        pendingTodos : {this.state.pendingTodos}
-        {this.state.todos.map((todo, index) => {
-          return (
-            <Editor
-              key={index}
-              title={this.state.todos[index].title}
-              todo={this.state.todos[index].todo}
-              handleMarkComplete={() => this.handleMarkComplete(index)}
-              handleMarkInProgress={() => this.handleMarkInProgress(index)}
-            />
-          );
-        })}
+  if(props.authorized)
+  return (
+    <div className="container">
+      <div class="row profile">
+        <div class="col-md-3">
+          <div class="profile-sidebar">
+            <div class="profile-usertitle">
+              <div class="profile-usertitle-name">{props.name}</div>
+            </div>
+            <div class="profile-userbuttons">
+              <button type="button" class="btn btn-warning">
+                Pending{"    "}
+                <span class="badge badge-light">{props.pendingTodos}</span>
+              </button>
+            </div>
+            <div class="profile-userbuttons">
+              <button type="button" class="btn btn-success">
+                In Progress{" "}
+                <span class="badge badge-light">{props.inProgress}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-9">
+          <div class="profile-content">
+            <div>
+              {props.todos.length > 0 &&
+                props.todos.map((todo, index) => {
+                  return (
+                    <div>
+                      <Editor
+                        key={index}
+                        todo={props.todos[index]}
+                        handleMarkComplete={() => handleMarkComplete(index)}
+                        handleMarkInProgress={() => handleMarkInProgress(index)}
+                      />
+                    </div>
+                  );
+                })}
+              {props.todos.length == 0 && <NewTodo addTodo={props.addTodo} />}
+            </div>
+          </div>
+        </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+  else
+    return <Redirect to="/login" />
+} 
 
 export default Profile;

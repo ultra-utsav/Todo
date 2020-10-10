@@ -51,17 +51,16 @@ router.post("/addTodo", (req, res) => {
 
 router.post("/getTodos", (req, res) => {
   const token = req.cookies.token;
-  console.log("we came here");
   jwt.verify(token, cfg.secret, (err, token_data) => {
     if (err) res.status(401).send("got invalid token!");
     else {
       const email = parseJwt(token).email;
       if (!email) res.status(400).send("unable to get todos!");
       else {
-        Todo.findOne({ email }, (err, todo) => {
+        Todo.findOne({ email }, (err, todos) => {
           if (err) res.status(403).send("Internal Server Error!");
           else {
-            res.status(200).send(todo);
+            res.status(200).send(todos);
           }
         });
       }
@@ -77,10 +76,10 @@ router.post("/deleteTodo", (req, res) => {
       const email = parseJwt(token).email;
       if (!email) res.status(400).send("unable to get todos!");
       else {
-        const { title, todo } = req.body;
+        const { todo } = req.body;
         Todo.updateOne(
           { email },
-          { $pull: { todos: { title: title, todo: todo } } },
+          { $pull: { todos: { _id: new ObjectID(todo._id) } } },
           (err, todo) => {
             if (err) res.status(403).send("Internal Server Error!");
             else {
@@ -106,7 +105,6 @@ router.post("/editTodo", (req, res) => {
           { email, "todos._id": new ObjectID(todo._id) },
           { $set: { "todos.$.inProgress": true } },
           (err, todo) => {
-            console.log(todo);
             if (err) res.status(403).send("Internal Server Error!");
             else {
               res.status(200).send("todo marked as in progress successfully");

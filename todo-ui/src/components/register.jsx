@@ -26,7 +26,6 @@ const Register = () => {
 
       fetch("http://localhost:8085/register/", requestOptions).then((res) => {
         if (res.status == 200) {
-          console.log("Registered  Successfully!");
           setRegistered(true);
         }
       });
@@ -84,6 +83,9 @@ const Register = () => {
               className="btn btn-success my-2 my-sm-0 btn-sm"
               type="submit"
             />
+          </div>
+          <div>
+            <a  href="/login">Already have an Account?</a>
           </div>
         </form>
       </center>
