@@ -26,7 +26,6 @@ const Register = () => {
 
       fetch("http://localhost:8085/register/", requestOptions).then((res) => {
         if (res.status == 200) {
-          console.log("Registered  Successfully!");
           setRegistered(true);
         }
       });

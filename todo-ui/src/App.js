@@ -22,7 +22,7 @@ function App() {
   const [pendingTodos, setPendingTodos] = useState(0);
   const [inProgress, setInProgress] = useState(0);
   const [authorized,setAuthorized] = useState(false);
-
+  const [name,setName] = useState("");
   //syncState to update state
   const syncState = (todos) => {
     let cnt = 0;
@@ -44,22 +44,29 @@ function App() {
   return (
     <React.StrictMode>
     <Router>
-      <NavBar addTodo={addTodo} />
+      <NavBar addTodo={addTodo} authorized={authorized} setAuthorized={setAuthorized} />
       <Switch>
         <Route exact path="/">
           <Register />
         </Route>
         <Route exact path="/index">
-          <Index />
+          <Index authorized={authorized} setAuthorized={setAuthorized} setName={setName}/>
         </Route>
         <Route exact path="/login">
-          <Login authorized={authorized} setAuthorized={setAuthorized} />
+          <Login 
+            authorized={authorized} 
+            setAuthorized={setAuthorized} 
+            setName={setName}
+          />
         </Route>
         <Route exact path="/profile">
           <Profile 
             syncState={syncState}
             addTodo={addTodo}
             todos={todos}
+            authorized={authorized}
+            name={name}
+            setAuthorized={setAuthorized}
             inProgress={inProgress}
             pendingTodos={pendingTodos}
           />

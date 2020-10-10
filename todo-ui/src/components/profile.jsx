@@ -4,7 +4,6 @@ import Editor from "./editor/editor";
 import NewTodo from "./editor/newTodo";
 import "./profile.css";
 function Profile(props) {
-  const [authorized,setAuthorized] = useState(false);
   //useEffect to set states before render
   useEffect(() => {
     let requestOptions = {
@@ -21,16 +20,19 @@ function Profile(props) {
         }
       })
       .then((data) => {
-        if(data)
+        if(data){
           props.syncState(data.todos);
+        }
       });
-    
-    requestOptions.method = "get";
-    fetch("http://localhost:8085/authenticate",requestOptions)
-      .then((res)=>{
-        if(res.status === 200)
-          setAuthorized(true);
-      });
+
+    if(!props.authorized) {
+      requestOptions.method = "get";
+      fetch("http://localhost:8085/authenticate",requestOptions)
+        .then((res)=>{
+          if(res.status === 200)
+            props.setAuthorized(true);
+        });
+    }
   }, props);
 
   //handleMarkComplete to handle mark complete todo
@@ -75,16 +77,14 @@ function Profile(props) {
     );
   };
 
-  if(!authorized)
-    return <Redirect to="/login" />
-
+  if(props.authorized)
   return (
     <div className="container">
       <div class="row profile">
         <div class="col-md-3">
           <div class="profile-sidebar">
             <div class="profile-usertitle">
-              <div class="profile-usertitle-name">Marcus Doe</div>
+              <div class="profile-usertitle-name">{props.name}</div>
             </div>
             <div class="profile-userbuttons">
               <button type="button" class="btn btn-warning">
@@ -109,8 +109,7 @@ function Profile(props) {
                     <div>
                       <Editor
                         key={index}
-                        title={props.todos[index].title}
-                        todo={props.todos[index].todo}
+                        todo={props.todos[index]}
                         handleMarkComplete={() => handleMarkComplete(index)}
                         handleMarkInProgress={() => handleMarkInProgress(index)}
                       />
@@ -124,6 +123,8 @@ function Profile(props) {
       </div>
     </div>
   );
-}
+  else
+    return <Redirect to="/login" />
+} 
 
 export default Profile;

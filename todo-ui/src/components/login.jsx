@@ -4,7 +4,7 @@ import { Redirect } from "react-router-dom";
 const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const
+
   const handleSubmit = () => {
     const requestOptions = {
       method: "post",
@@ -13,12 +13,15 @@ const Login = (props) => {
       credentials: "include",
       body: JSON.stringify({ email, password }),
     };
-
     fetch("http://localhost:8085/login/", requestOptions).then((res) => {
       if (res.status == 200) {
         props.setAuthorized(true);
+        return res.json();       
       }
+    }).then((data)=>{
+      props.setName(data.name);
     });
+    
   };
 
   if (props.authorized) {

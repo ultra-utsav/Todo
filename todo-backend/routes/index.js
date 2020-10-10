@@ -15,11 +15,10 @@ router.post("/login", (req, res) => {
         if (err) {
           res.status(400).send("invalid password!");
         } else {
-          const payload = { email };
+          const payload = { email,name:user.name };
           const token = jwt.sign(payload, cfg.secret, { expiresIn: "1d" });
           res.cookie("token", token);
-          console.log("login Successful!");
-          res.status(200).send("login Successful!");
+          res.status(200).send(user);
         }
       });
     }
@@ -42,10 +41,8 @@ router.post("/register", (req, res) => {
         });
         newUser.save((err, user) => {
           if (err) {
-            console.log("internal server error!");
             res.status(403).send("internal server error!");
           } else {
-            console.log("registered successfully!");
             const payload = { email };
             const token = jwt.sign(payload, cfg.secret, { expiresIn: "10m" });
             res.cookie("token", token, { httpOnly: true });
@@ -59,13 +56,15 @@ router.post("/register", (req, res) => {
 
 router.get("/authenticate", (req, res) => {
   const token = req.cookies.token;
-  jwt.verify(token, cfg.secret, (err, token_data) => {
+  jwt.verify(token, cfg.secret, (err, token_data) => {  
     if (err) res.status(401).send("Authentication Failed!");
     else {
-      const email = parseJwt(token).email;
+      const data = parseJwt(token);
+      const email = data.email;
+      const name = data.name;
       if (!email) res.status(400).send("Authentication Failed!");
       else {
-        res.status(200).send(email);
+        res.status(200).send({email,name});
       }
     }
   });

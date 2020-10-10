@@ -28,7 +28,6 @@ router.post("/addTodo", (req, res) => {
     else {
       let { todo } = req.body;
       const email = parseJwt(token).email;
-      console.log(todo);
       if (!email || !todo) res.status(400).send("unable to store todo!");
       else {
         Todo.findOneAndUpdate(
@@ -52,7 +51,6 @@ router.post("/addTodo", (req, res) => {
 
 router.post("/getTodos", (req, res) => {
   const token = req.cookies.token;
-  console.log("we came here");
   jwt.verify(token, cfg.secret, (err, token_data) => {
     if (err) res.status(401).send("got invalid token!");
     else {
@@ -79,7 +77,6 @@ router.post("/deleteTodo", (req, res) => {
       if (!email) res.status(400).send("unable to get todos!");
       else {
         const { todo } = req.body;
-        console.log(req.body);
         Todo.updateOne(
           { email },
           { $pull: { todos: { _id: new ObjectID(todo._id) } } },

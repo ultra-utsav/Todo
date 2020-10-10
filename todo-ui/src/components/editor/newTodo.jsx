@@ -3,9 +3,9 @@ import { Modal, Button } from "react-bootstrap";
 
 function NewTodo(props) {
   const [title, setTitle] = useState("");
-  const [todo, setTodo] = useState("");
+  const [content, setContent] = useState("");
   const handleSubmit = () => {
-    const todos = { title, todo };
+    const todos = { title, content };
     const requestOptions = {
       method: "post",
       headers: { "Content-Type": "application/json" },
@@ -41,7 +41,7 @@ function NewTodo(props) {
                   class="form-control z-depth-1"
                   id="exampleFormControlTextarea6"
                   rows="6"
-                  onChange={(e) => setTodo(e.target.value)}
+                  onChange={(e) => setContent(e.target.value)}
                 ></textarea>
               </div>
             </div>
