@@ -1,48 +1,46 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
-import Profile from "./profile";
-
+// import "./index.css";
 function Index (props) {
   const [showComponent,setShowComponent] = useState(false);
   
-  const _onButtonClick=()=> {
+  const _onButtonClick = () => {
     setShowComponent(true);
   }
 
-  useEffect(() => {
-    let requestOptions = {
-      method: "get",
-      headers: { "Content-Type": "application/json" },
-      withCredentials: true,
-      credentials: "include",
-    };
-    fetch("http://localhost:8085/authenticate",requestOptions)
-      .then((res)=>{
-        if(res.status === 200)
-          props.setAuthorized(true);
-          return res.json();
-      }).
-      then((data)=>{
-        if(data)
-          props.setName(data.name);
-      });
-  }, props);
-
-  if(!props.authorized)
-    return <Redirect to="/login" />
-  if(showComponent)
+  if(!props.user.authorized)
+    return <Redirect to="/" />
+  if(showComponent) {
     return <Redirect to="/profile" />
-  return <div>
+  }
     
+    
+  return (
+  <div className="App bgimg" style={{marginTop:"15%"}}>
+    <div >
+      <div >
+        <h1 class="w3-jumbo w3-animate-top">DONT BE YOURSELF FREE</h1>
+        <hr class="w3-border-grey" style={{margin:"auto",width:"40%"}} />
+        <p class="w3-large w3-center">Track your todos with TODOS</p>
+        </div>
+    </div>
+    <div>
       <button
         className="btn btn-outline-success my-2 my-sm-0 btn-sm"
-        type="submit"
         onClick={_onButtonClick}
       >
-      My Profile
+      My Todos
       </button>
-  </div>;
-  
+    </div>
+  </div>
+  );
 }
 
-export default Index;
+const mapStateToProps = state=> {
+  return {
+    user : state.user
+  }
+}
+
+export default connect(mapStateToProps)(Index);

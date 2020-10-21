@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Modal, Button } from "react-bootstrap";
+import React, { useState } from "react";
+import { Modal } from "react-bootstrap";
+import { connect } from "react-redux";
 import NewTodo from "./editor/newTodo";
 
 const NavBar = (props) => {
@@ -10,9 +11,9 @@ const NavBar = (props) => {
 
   return (
     <div>
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <button
-          class="navbar-toggler"
+          className="navbar-toggler"
           type="button"
           data-toggle="collapse"
           data-target="#navbarTogglerDemo03"
@@ -20,17 +21,17 @@ const NavBar = (props) => {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="#">
+        <a className="navbar-brand" >
           TODO
         </a>
 
-        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-          {props.authorized && (
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="#">
+        <div className="navbar-collapse collapse w-100 order-3 dual-collapse2">
+          {props.user.authorized && (
+          <ul className="navbar-nav ml-auto">
+            <li className="nav-item">
+              <a className="nav-link" href="#">
                 <button
                   onClick={handleShow}
                   className="btn btn-outline-success my-2 my-sm-0 btn-sm"
@@ -62,10 +63,10 @@ const NavBar = (props) => {
             </li> */}
           </ul>
           )}
-          {!props.authorized && (
-            <ul class="navbar-nav ml-auto">
-              <li class="nav-item">
-                <a class="nav-link" href="/login">
+          {!props.user.authorized && (
+            <ul className="navbar-nav ml-auto">
+              <li className="nav-item">
+                <a className="nav-link" href="/login">
                 <button
                   className="btn btn-outline-success my-2 my-sm-0 btn-sm"
                   type="submit"
@@ -82,4 +83,10 @@ const NavBar = (props) => {
   );
 };
 
-export default NavBar;
+const mapStateToProps = state => {
+  return {
+    user : state.user
+  }
+}
+
+export default connect(mapStateToProps)(NavBar);

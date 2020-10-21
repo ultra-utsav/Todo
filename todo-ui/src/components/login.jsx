@@ -1,47 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { connect,useDispatch,useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
+import {setUser} from "../redux/user/userAction";
 
 const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const handleSubmit =  () => {
+    const user = { email, password };
+    props.setUser(user);
+  }
 
-  const handleSubmit = () => {
-    const requestOptions = {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      withCredentials: true,
-      credentials: "include",
-      body: JSON.stringify({ email, password }),
-    };
-    fetch("http://localhost:8085/login/", requestOptions).then((res) => {
-      if (res.status == 200) {
-        props.setAuthorized(true);
-        return res.json();       
-      }
-    }).then((data)=>{
-      props.setName(data.name);
-    });
-    
-  };
-
-  if (props.authorized) {
+  if (props.user.authorized) {
     return <Redirect to="/index" />;
   }
 
   return (
+
     <div className="App">
       <center>
-          <h2>
-            <strong>L</strong>ogin
+        <h2>
+          <strong>L</strong>ogin
           </h2>
-          <div className="form-group">
-            {props.authorized && (
-              <div className="alert alert-success" role="alert">
-                Login Successfully
-              </div>
-            )}
-          </div>
-
           <div className="form-group">
             <input
               name="email"
@@ -53,19 +33,15 @@ const Login = (props) => {
           <div className="form-group">
             <input
               name="password"
-              type="text"
+              type="password"
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <div>
-            <input
-              className="btn btn-success my-2 my-sm-0 btn-sm"
-              type="submit"
-              onClick={handleSubmit}
-            />
-          </div>
-          {/* <div>
+            <button className="btn btn-success my-2 my-sm-0 btn-sm" onClick={handleSubmit}> Submit</button>
+          </div>    
+        {/* <div>
             <a  href="/">SignUp</a>
           </div> */}
       </center>
@@ -73,4 +49,10 @@ const Login = (props) => {
   );
 };
 
-export default Login;
+const mapStateToProps = state => {
+  return {
+    user : state.user
+  }
+}
+
+export default connect(mapStateToProps,{setUser})(Login);

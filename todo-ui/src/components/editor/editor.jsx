@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { Editor, EditorState } from "draft-js";
+import React from "react";
 import "./editor.css";
 
 function MyEditor(props) {

@@ -40,7 +40,11 @@ router.post("/addTodo", (req, res) => {
             if (error) {
               res.status(403).send("Internal Server error!");
             } else {
-              res.status(200).send("todo added successfully!");
+              Todo.findOne({ email }, (err, todo) => {
+                res
+                  .status(200)
+                  .send(JSON.stringify(todo.todos[todo.todos.length - 1]));
+              });
             }
           }
         );
@@ -51,6 +55,7 @@ router.post("/addTodo", (req, res) => {
 
 router.post("/getTodos", (req, res) => {
   const token = req.cookies.token;
+  console.log("Here we came");
   jwt.verify(token, cfg.secret, (err, token_data) => {
     if (err) res.status(401).send("got invalid token!");
     else {

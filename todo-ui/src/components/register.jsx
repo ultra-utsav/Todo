@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { propTypes } from "react-bootstrap/esm/Image";
+import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-const Register = () => {
+const Register = (props) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,12 +27,16 @@ const Register = () => {
       };
 
       fetch("http://localhost:8085/register/", requestOptions).then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           setRegistered(true);
         }
       });
     }
   };
+
+  if(props.user.authorized){
+    return <Redirect to="/index" />
+  }
 
   if (Registered) {
     return <Redirect to="#" />;
@@ -93,4 +99,9 @@ const Register = () => {
   );
 };
 
-export default Register;
+const mapStateToProps = state => {
+  return {
+    user : state.user
+  }
+}
+export default connect(mapStateToProps)(Register);
