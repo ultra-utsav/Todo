@@ -9,3 +9,8 @@ Functionalities:
       II. Total Pending todos
       III. Total In Progress todos
   4. Mark todo as a) Complete b) In Progress
+
+Tech-stack : 
+  1. Reactjs and redux
+  2. Nodejs
+  3. MongoDB
