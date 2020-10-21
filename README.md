@@ -1,7 +1,11 @@
 # Todo
+An Web based application that give more functionalities to maintain todos.
 
-Features : 
-1. Registration
-2. Authentication
-3. Add todo
-4. In buit editor.
+Functionalities:
+  1. Authentication
+  2. Create New todo
+  3. Profile 
+      I. All todos.
+      II. Total Pending todos
+      III. Total In Progress todos
+  4. Mark todo as a) Complete b) In Progress
